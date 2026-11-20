@@ -19,3 +19,9 @@ export async function hashPassword(value) {
   const hash = await derive(value, salt, 64, settings);
   return salt.toString('hex') + ':' + hash.toString('hex');
 }
+
+export async function checkPassword(value, saved) {
+  const [salt, expected] = saved.split(':');
+  const digest = await derive(value, Buffer.from(salt, 'hex'), 64, settings);
+  return timingSafeEqual(digest, Buffer.from(expected, 'hex'));
+}
