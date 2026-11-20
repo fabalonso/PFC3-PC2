@@ -74,3 +74,11 @@ dialog::backdrop { background: #11261d80; }
 .publish-form { display: grid; grid-template-columns: repeat(3, 1fr) auto; align-items: end; gap: 12px; }
 @media (max-width: 790px) { .publish-form { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 570px) { .publish-form { grid-template-columns: 1fr; } }
+
+.card-top { display: flex; align-items: start; justify-content: space-between; gap: 8px; }
+.offer-card h3 { text-transform: capitalize; margin-top: 11px; }
+.offer-state { border-radius: 18px; padding: 5px 8px; font-size: 13px; font-weight: 700; background: #e6f1e0; color: #204d35; }
+.state-reserved { background: #fff1cb; color: #684916; }
+.state-delivered { background: #e4eef6; color: #294960; }
+.offer-weight, .empty { color: var(--muted); }
+.offer-weight { margin: 0 0 9px; }

@@ -17,6 +17,13 @@ export function offersRouter(db) {
     };
   }
 
+  router.get('/', async (_req, res) => {
+    const { rows } = await db.query(
+      "SELECT " + publicColumns + " FROM offers WHERE status = 'available' ORDER BY id DESC",
+    );
+    res.json({ items: rows });
+  });
+
   router.post('/', requireRole('generator'), async (req, res) => {
     const { material, district: input, weightKg } = req.body ?? {};
     const district = typeof input === 'string' ? input.trim() : '';
