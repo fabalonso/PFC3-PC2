@@ -42,6 +42,13 @@ export function initOffers() {
     return button;
   }
 
+  function pickupAction(offer) {
+    if (offer.status === 'reserved' && user?.role === 'collector') {
+      return actionButton(offer, 'cancel', 'Cancelar reserva', 'Reserva cancelada. El material vuelve a estar disponible.');
+    }
+    return null;
+  }
+
   async function refreshOffers() {
     const request = ++latest;
     try {

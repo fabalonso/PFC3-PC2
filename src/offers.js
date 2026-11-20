@@ -64,5 +64,14 @@ export function offersRouter(db) {
     res.json({ item: offer });
   });
 
+  router.post('/:id/cancel', requireRole('collector'), async (_req, res) => {
+    const { rows: [offer] } = await db.query(
+      "UPDATE offers SET status = 'available', collector_id = NULL WHERE id = $1 AND status = 'reserved' AND collector_id = $2 RETURNING " + publicColumns,
+      [res.locals.offerId, res.locals.user.id],
+    );
+    if (!offer) return res.status(409).json({ error: 'La reserva no está disponible para cancelar.' });
+    res.json({ item: offer });
+  });
+
   return router;
 }
