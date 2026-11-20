@@ -28,7 +28,7 @@ export function placesRouter(db) {
       return res.status(404).json({ error: 'Punto de acopio no encontrado.' });
     }
     const { rows: [place] } = await db.query(
-      'SELECT id, name, district, schedule, materials FROM places WHERE id = $1 AND active',
+      'SELECT id, name, district, address, schedule, materials FROM places WHERE id = $1 AND active',
       [id],
     );
     if (!place) return res.status(404).json({ error: 'Punto de acopio no encontrado.' });

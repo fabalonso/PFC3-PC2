@@ -14,10 +14,13 @@ function placeCard(place) {
     content.textContent = 'Cargando ficha…';
     try {
       const { item } = await api('/api/places/' + place.id);
+      const map = new URL('https://www.google.com/maps/search/');
+      map.search = new URLSearchParams({ api: '1', query: item.address });
       content.replaceChildren(
         el('p', { text: item.schedule }),
         el('ul', { className: 'tags', 'aria-label': 'Materiales aceptados' },
           ...item.materials.map((material) => el('li', { text: material }))),
+        el('a', { className: 'map-link', href: map.href, target: '_blank', rel: 'noopener noreferrer', text: 'Ver en el mapa' }),
       );
       loaded = true;
     } catch (error) {

@@ -54,3 +54,5 @@ details summary { cursor: pointer; color: var(--green); font-weight: 650; }
 
 .field { display: flex; flex-direction: column; gap: 5px; min-width: 145px; color: var(--muted); font-size: 14px; font-weight: 650; }
 .field select, .field input { width: 100%; min-height: 42px; border: 1px solid #b7c8ba; padding: 8px 11px; color: var(--ink); background: #fff; border-radius: 9px; }
+
+.map-link { color: var(--green); font-weight: 700; }
