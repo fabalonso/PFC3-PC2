@@ -17,9 +17,12 @@ export function offersRouter(db) {
     };
   }
 
-  router.get('/', async (_req, res) => {
+  router.get('/', async (req, res) => {
+    const district = typeof req.query.district === 'string' ? req.query.district.trim() : '';
+    const material = typeof req.query.material === 'string' ? req.query.material.trim() : '';
     const { rows } = await db.query(
-      "SELECT " + publicColumns + " FROM offers WHERE status = 'available' ORDER BY id DESC",
+      "SELECT " + publicColumns + " FROM offers WHERE status = 'available' AND ($1::text IS NULL OR district = $1) AND ($2::text IS NULL OR material = $2) ORDER BY id DESC",
+      [district || null, material || null],
     );
     res.json({ items: rows });
   });

@@ -19,15 +19,24 @@ export function initOffers() {
   let user = null;
   let catalog = null;
   const list = document.querySelector('#offer-list');
+  const filters = document.querySelector('#offer-filters');
+  let districtFilter;
+  let materialFilter;
   let latest = 0;
 
   async function refreshOffers() {
     const request = ++latest;
     try {
-      const { items } = await api('/api/offers');
+      const query = new URLSearchParams();
+      if (districtFilter?.control.value) query.set('district', districtFilter.control.value);
+      if (materialFilter?.control.value) query.set('material', materialFilter.control.value);
+      const { items } = await api('/api/offers?' + query);
       if (request !== latest) return;
       list.replaceChildren(...items.map((offer) => offerCard(offer)));
-      if (!items.length) list.append(el('p', { className: 'empty', text: 'Todavía no hay material disponible.' }));
+      if (!items.length) {
+        const message = query.size ? 'No hay ofertas que coincidan con los filtros.' : 'Todavía no hay material disponible.';
+        list.append(el('p', { className: 'empty', text: message }));
+      }
     } catch (error) {
       if (request !== latest) return;
       list.replaceChildren();
@@ -75,6 +84,11 @@ export function initOffers() {
   refreshOffers();
   api('/api/places/filters').then((data) => {
     catalog = data;
+    districtFilter = selectField('Distrito', 'offerDistrict', data.districts, { placeholder: 'Todos los distritos' });
+    materialFilter = selectField('Material', 'offerMaterial', data.materials, { placeholder: 'Todos los materiales' });
+    filters.replaceChildren(districtFilter.field, materialFilter.field);
+    districtFilter.control.addEventListener('change', refreshOffers);
+    materialFilter.control.addEventListener('change', refreshOffers);
     renderForm();
   }).catch((error) => { status.textContent = error.message; });
   return (value) => {
