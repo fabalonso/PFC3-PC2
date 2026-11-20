@@ -33,6 +33,16 @@ export function createApp(database = pool) {
     next();
   });
   app.use(express.json({ limit: '12kb' }));
+  app.get('/health', async (_req, res) => {
+    res.set('Cache-Control', 'no-store');
+    try {
+      await database.query('SELECT id FROM places LIMIT 1');
+      return res.json({ status: 'ok', database: 'up', revision: process.env.APP_REVISION ?? 'local' });
+    } catch (error) {
+      console.error('health_database_error', { code: error.code ?? 'unexpected' });
+      return res.status(503).json({ status: 'unavailable', database: 'down' });
+    }
+  });
   app.use(express.static(fileURLToPath(new URL('./public/', import.meta.url))));
   app.get('/', (req, res) => res.redirect(302, '/index.html'));
   app.use('/api/places', placesRouter(database));

@@ -24,3 +24,5 @@ Trabaja en test y abre un pull request hacia main. Cada commit de la práctica i
 El proyecto Vercel se conecta a Neon mediante DATABASE_URL. GitHub Actions usa VERCEL_TOKEN, VERCEL_ORG_ID y VERCEL_PROJECT_ID como secretos. El token requiere acceso al proyecto de producción. El workflow aplica las migraciones con DATABASE_URL_UNPOOLED cuando está disponible, construye el artefacto de Vercel y publica el commit validado.
 
 Producción: https://recircula-lima-pc2.vercel.app
+
+El job final comprueba la portada, los recursos de la interfaz, el directorio y /health con el SHA desplegado. Para repetir la prueba manualmente, ejecuta node scripts/smoke.js URL_PUBLICA SHA_ESPERADO.

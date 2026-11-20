@@ -129,3 +129,5 @@ jobs:
         run: |
           npm exec --yes --package=vercel@66.5.0 -- vercel deploy --prebuilt --prod --yes --env "APP_REVISION=$GITHUB_SHA" --token "$VERCEL_TOKEN"
           printf '### Producción\n\n%s\n\nCommit: %s\n' "$PRODUCTION_URL" "$GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+      - name: Prueba de humo · portada, API y revisión
+        run: node scripts/smoke.js "$PRODUCTION_URL" "$GITHUB_SHA"
