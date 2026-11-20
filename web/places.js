@@ -39,20 +39,22 @@ export async function initPlaces() {
   const status = document.querySelector('#place-status');
   status.textContent = 'Cargando puntos de acopio…';
   try {
-    const { districts } = await api('/api/places/filters');
+    const { districts, materials } = await api('/api/places/filters');
     const district = selectField('Distrito', 'district', districts, { placeholder: 'Todos los distritos' });
-    filters.replaceChildren(district.field);
+    const material = selectField('Material', 'material', materials, { placeholder: 'Todos los materiales' });
+    filters.replaceChildren(district.field, material.field);
     let latest = 0;
     async function refresh() {
       const request = ++latest;
       const query = new URLSearchParams();
       if (district.control.value) query.set('district', district.control.value);
+      if (material.control.value) query.set('material', material.control.value);
       status.textContent = 'Buscando puntos de acopio…';
       try {
         const { items } = await api('/api/places?' + query);
         if (request !== latest) return;
         list.replaceChildren(...items.map(placeCard));
-        status.textContent = items.length ? items.length + ' puntos encontrados' : 'No hay coincidencias para este distrito.';
+        status.textContent = items.length ? items.length + ' puntos encontrados' : 'No hay puntos que coincidan con los filtros.';
       } catch (error) {
         if (request !== latest) return;
         list.replaceChildren();
@@ -60,6 +62,7 @@ export async function initPlaces() {
       }
     }
     district.control.addEventListener('change', refresh);
+    material.control.addEventListener('change', refresh);
     await refresh();
   } catch (error) {
     status.textContent = error.message;
