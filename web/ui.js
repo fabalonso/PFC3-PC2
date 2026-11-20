@@ -17,3 +17,12 @@ export async function api(path, options = {}) {
   if (!response.ok) throw new Error(result.error ?? 'El servicio no está disponible en este momento.');
   return result;
 }
+
+export function selectField(label, name, options, { placeholder = 'Todos', required = false } = {}) {
+  const control = el('select', { name, required },
+    el('option', { value: '', text: placeholder, disabled: required }),
+    ...options.map((option) => el('option', { value: option, text: option })),
+  );
+  const field = el('label', { className: 'field' }, el('span', { text: label }), control);
+  return { field, control };
+}

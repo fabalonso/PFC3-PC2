@@ -4,10 +4,17 @@ export function placesRouter(db) {
   const router = Router();
 
   router.get('/', async (req, res) => {
+    const district = typeof req.query.district === 'string' ? req.query.district.trim() : '';
     const { rows } = await db.query(
-      'SELECT id, name, district, materials FROM places WHERE active ORDER BY name',
+      'SELECT id, name, district FROM places WHERE active AND ($1::text IS NULL OR district = $1) ORDER BY name',
+      [district || null],
     );
     res.json({ items: rows });
+  });
+
+  router.get('/filters', async (_req, res) => {
+    const { rows } = await db.query('SELECT DISTINCT district FROM places WHERE active ORDER BY district');
+    res.json({ districts: rows.map(({ district }) => district) });
   });
 
   router.get('/:id', async (req, res) => {
