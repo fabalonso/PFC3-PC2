@@ -1,0 +1,23 @@
+{
+  "name": "recircula-lima",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "build": "esbuild web/main.js web/style.css --bundle --minify --outdir=public/assets",
+    "start": "node --env-file-if-exists=.env server.js",
+    "db:migrate": "node --env-file-if-exists=.env scripts/migrate.js",
+    "test": "node --test --test-reporter=spec"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.4.0",
+    "esbuild": "^0.25.0"
+  }
+}

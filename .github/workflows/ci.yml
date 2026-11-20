@@ -1,0 +1,133 @@
+name: CI/CD · ReCircula Lima
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [test, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build del frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+  test:
+    name: Pruebas de integración con PostgreSQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: recircula_ci
+          POSTGRES_DB: recircula_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U recircula_ci -d recircula_test"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql://recircula_ci@127.0.0.1:5432/recircula_test
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  sast:
+    name: Seguridad · SAST con Semgrep
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Instalar Semgrep
+        run: python3 -m pip install --disable-pip-version-check semgrep==1.185.0
+      - name: Analizar frontend y backend
+        run: semgrep scan --config p/default --config .semgrep.yml --metrics=off --error app.js src web
+
+  secrets:
+    name: Seguridad · escaneo de secretos
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Escanear el historial Git con Gitleaks
+        run: |
+          docker run --rm \
+            -e GIT_CONFIG_COUNT=1 \
+            -e GIT_CONFIG_KEY_0=safe.directory \
+            -e GIT_CONFIG_VALUE_0=/repo \
+            -v "$GITHUB_WORKSPACE:/repo:ro" \
+            ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:b109bc5f8f76a38196a3e413704fc5b9e3c32360bce4e4b603bd6f45b3721dbb \
+            git --redact=100 --no-banner /repo
+
+  deploy:
+    name: Despliegue de producción en Vercel
+    needs: [build, test, sast, secrets]
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: recircula-produccion
+      cancel-in-progress: false
+    environment:
+      name: production
+      url: ${{ env.PRODUCTION_URL }}
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      PRODUCTION_URL: https://recircula-lima-pc2.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Descargar configuración de producción
+        run: |
+          test -n "$VERCEL_TOKEN" && test -n "$VERCEL_PROJECT_ID" && test -n "$VERCEL_ORG_ID"
+          npm exec --yes --package=vercel@66.5.0 -- vercel pull --yes --environment=production --token "$VERCEL_TOKEN"
+      - name: Aplicar migraciones de PostgreSQL
+        run: node --env-file=.vercel/.env.production.local scripts/migrate.js
+      - name: Generar artefacto de Vercel
+        run: |
+          npm run build
+          npm exec --yes --package=vercel@66.5.0 -- vercel build --prod --token "$VERCEL_TOKEN"
+      - name: Publicar el commit validado
+        run: |
+          npm exec --yes --package=vercel@66.5.0 -- vercel deploy --prebuilt --prod --yes --env "APP_REVISION=$GITHUB_SHA" --token "$VERCEL_TOKEN"
+          printf '### Producción\n\n%s\n\nCommit: %s\n' "$PRODUCTION_URL" "$GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+      - name: Prueba de humo · portada, API y revisión
+        run: node scripts/smoke.js "$PRODUCTION_URL" "$GITHUB_SHA"
