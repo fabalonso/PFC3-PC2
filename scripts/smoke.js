@@ -21,13 +21,20 @@ async function smoke() {
   const js = await get('/assets/main.js');
   assert.match(css.headers.get('content-type') ?? '', /text\/css/i);
   assert.match(js.headers.get('content-type') ?? '', /javascript/i);
+  const pages = await Promise.all(['/acopio', '/ofertas', '/actividad', '/registro', '/iniciar-sesion'].map(async (route) =>
+    (await get(route)).text()));
+  assert.match(pages[0], /id="place-map"/);
+  assert.match(pages[1], /id="offer-list"/);
+  assert.match(pages[2], /id="activity-list"/);
+  assert.match(pages[3], /Antes de registrarte/);
+  assert.match(pages[4], /id="login-form"/);
   const health = await (await get('/health')).json();
   assert.equal(health.status, 'ok');
   assert.equal(health.database, 'up');
   assert.equal(health.revision, expected, 'El dominio aún sirve una revisión distinta');
   const places = await (await get('/api/places')).json();
   assert.ok(Array.isArray(places.items) && places.items.length > 0, 'El directorio debe mostrar puntos de acopio');
-  console.log('Prueba de humo exitosa: portada, recursos, salud y directorio.');
+  console.log('Prueba de humo exitosa: portada, páginas, recursos, salud y directorio.');
   console.log('URL:', base.origin);
   console.log('Commit:', health.revision);
 }

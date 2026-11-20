@@ -13,8 +13,12 @@ export async function api(path, options = {}) {
   const { method = 'GET', body } = options;
   const headers = body === undefined ? undefined : { 'Content-Type': 'application/json' };
   const response = await fetch(path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
-  const result = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(result.error ?? 'El servicio no está disponible en este momento.');
+  if (response.status === 204) return {};
+  const result = response.headers.get('content-type')?.includes('application/json')
+    ? await response.json().catch(() => null) : null;
+  if (!response.ok || !result) {
+    throw new Error(result?.error ?? 'El servicio no está disponible en este momento.');
+  }
   return result;
 }
 

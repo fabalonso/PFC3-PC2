@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Encuentra puntos de acopio y coordina recojos de material reciclable en Lima.">
+  <meta name="theme-color" content="#f5f7f4">
+  <title>Mi actividad | ReCircula Lima</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script type="module" src="/assets/main.js"></script>
+</head>
+<body data-page="activity">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="/" aria-label="ReCircula Lima, inicio"><span class="brand-mark" aria-hidden="true">↻</span><span>ReCircula <strong>Lima</strong></span></a>
+      <nav class="main-nav" aria-label="Navegación principal"><a href="/">Inicio</a><a href="/acopio">Acopio</a><a href="/ofertas">Ofertas</a><a href="/actividad" aria-current="page">Mi actividad</a></nav>
+      <div id="account-nav" class="account-nav"><a class="nav-login" href="/iniciar-sesion">Iniciar sesión</a><a class="button button-compact" href="/registro">Crear cuenta</a></div>
+    </div>
+  </header>
+  <main id="contenido" class="wrap">
+    <p id="account-notice" class="status account-notice" role="status"></p>
+    <section class="page-head" aria-labelledby="activity-title">
+      <h1 id="activity-title">Mi actividad</h1>
+      <p id="activity-description">Consulta tus publicaciones, reservas y entregas.</p>
+    </section>
+    <section aria-label="Actividad de la cuenta">
+      <div id="activity-gate" class="card empty-state" hidden>
+        <h2>Inicia sesión para ver tu actividad</h2>
+        <p>Encontrarás aquí el estado de tus publicaciones o recojos.</p>
+        <a class="button" href="/iniciar-sesion?volver=actividad">Iniciar sesión</a>
+      </div>
+      <p id="activity-status" class="status" aria-live="polite"></p>
+      <div id="activity-list" class="card-grid" aria-live="polite"></div>
+    </section>
+  </main>
+  <footer class="wrap footer"><span>ReCircula Lima</span><span>Datos de demostración</span></footer>
+</body>
+</html>
