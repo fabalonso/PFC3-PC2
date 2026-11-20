@@ -56,3 +56,13 @@ details summary { cursor: pointer; color: var(--green); font-weight: 650; }
 .field select, .field input { width: 100%; min-height: 42px; border: 1px solid #b7c8ba; padding: 8px 11px; color: var(--ink); background: #fff; border-radius: 9px; }
 
 .map-link { color: var(--green); font-weight: 700; }
+
+.account-nav { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.notice { color: var(--green); font-weight: 700; }
+.notice:empty { display: none; }
+dialog { position: relative; width: min(470px, calc(100% - 32px)); max-height: calc(100dvh - 32px); border: 1px solid var(--line); border-radius: 18px; color: var(--ink); padding: 27px; box-shadow: 0 15px 45px #102a2452; }
+dialog::backdrop { background: #11261d80; }
+.dialog-close { position: absolute; right: 13px; top: 10px; border: 0; background: transparent; color: var(--ink); font-size: 28px; cursor: pointer; }
+.form-stack { display: grid; gap: 13px; }
+.form-stack .status { margin: 0; }
+.form-stack .status:empty { display: none; }
