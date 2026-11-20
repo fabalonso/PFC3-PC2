@@ -45,3 +45,9 @@ h2 { margin: 0; letter-spacing: -.035em; font-size: clamp(26px, 4vw, 37px); }
 .footer { border-top: 1px solid var(--line); padding: 22px 0 28px; color: var(--muted); font-size: 14px; }
 @media (max-width: 790px) { .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .wrap { width: calc(100% - 36px); } }
 @media (max-width: 570px) { .hero { grid-template-columns: 1fr; min-height: auto; } .hero-art { display: none; } .card-grid { grid-template-columns: 1fr; } .topbar-inner { padding: 10px 0; flex-wrap: wrap; gap: 10px; } nav { gap: 13px; } .section-head { align-items: flex-start; flex-direction: column; } }
+
+details summary { cursor: pointer; color: var(--green); font-weight: 650; }
+.detail-content { margin-top: 10px; font-size: 15px; }
+.detail-content p { margin: 0 0 8px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0 0 10px; list-style: none; }
+.tags li { border-radius: 20px; background: #eaf2e5; padding: 5px 9px; font-size: 14px; }

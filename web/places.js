@@ -1,9 +1,35 @@
 import { api, el } from './ui.js';
 
 function placeCard(place) {
+  const content = el('div', { className: 'detail-content' });
+  const detail = el('details', {},
+    el('summary', { text: 'Ver horarios y materiales' }),
+    content,
+  );
+  let loaded = false;
+  let loading = false;
+  detail.addEventListener('toggle', async () => {
+    if (!detail.open || loaded || loading) return;
+    loading = true;
+    content.textContent = 'Cargando ficha…';
+    try {
+      const { item } = await api('/api/places/' + place.id);
+      content.replaceChildren(
+        el('p', { text: item.schedule }),
+        el('ul', { className: 'tags', 'aria-label': 'Materiales aceptados' },
+          ...item.materials.map((material) => el('li', { text: material }))),
+      );
+      loaded = true;
+    } catch (error) {
+      content.textContent = error.message;
+    } finally {
+      loading = false;
+    }
+  });
   return el('article', { className: 'card' },
     el('p', { className: 'district', text: place.district }),
     el('h3', { text: place.name }),
+    detail,
   );
 }
 
