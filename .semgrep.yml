@@ -1,0 +1,20 @@
+rules:
+  - id: recircula-no-dynamic-execution
+    languages: [javascript]
+    message: Evita ejecutar código construido dinámicamente.
+    severity: ERROR
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+  - id: recircula-no-html-injection
+    languages: [javascript]
+    message: Construye la interfaz con nodos y asigna contenido como texto.
+    severity: ERROR
+    pattern-either:
+      - pattern: $ELEMENT.innerHTML = ...
+      - pattern: $ELEMENT.insertAdjacentHTML(...)
+  - id: recircula-no-unsafe-cookie
+    languages: [javascript]
+    message: Mantén las cookies de sesión inaccesibles desde JavaScript.
+    severity: ERROR
+    pattern: 'res.cookie($NAME, $VALUE, { ..., httpOnly: false, ... })'

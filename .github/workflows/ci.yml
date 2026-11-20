@@ -56,3 +56,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+
+  sast:
+    name: Seguridad · SAST con Semgrep
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Instalar Semgrep
+        run: python3 -m pip install --disable-pip-version-check semgrep==1.185.0
+      - name: Analizar frontend y backend
+        run: semgrep scan --config p/default --config .semgrep.yml --metrics=off --error app.js src web
