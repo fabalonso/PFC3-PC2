@@ -184,3 +184,30 @@ test('solo el generador propietario confirma la entrega y cada usuario ve su act
   assert.ok(!other.data.items.some(({ id }) => id === item.id));
   assert.equal((await change(item, 'cancel', collector)).status, 409);
 });
+
+test('las secciones principales tienen páginas y rutas independientes', async () => {
+  const pages = [
+    ['/', /data-page="home"/],
+    ['/acopio', /id="place-map"/],
+    ['/ofertas', /id="offer-list"/],
+    ['/actividad', /id="activity-list"/],
+    ['/registro', /Antes de registrarte/],
+    ['/iniciar-sesion', /id="login-form"/],
+  ];
+  for (const [path, marker] of pages) {
+    const response = await fetch(base + path, { redirect: 'manual' });
+    assert.equal(response.status, 200, path);
+    assert.match(await response.text(), marker, path);
+  }
+});
+
+test('el directorio proporciona ubicaciones de referencia y permite el mapa dentro de la página', async () => {
+  const { data } = await call('/api/places');
+  assert.equal(data.items.length, 6);
+  assert.ok(data.items.every(({ latitude, longitude }) =>
+    Number.isFinite(latitude) && latitude > -12.2 && latitude < -12
+    && Number.isFinite(longitude) && longitude > -77.1 && longitude < -76.9));
+  const response = await fetch(base + '/acopio', { redirect: 'manual' });
+  const policy = response.headers.get('content-security-policy') ?? '';
+  assert.match(policy, /frame-src https:\/\/www\.openstreetmap\.org(?:;|$)/);
+});

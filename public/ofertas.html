@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Encuentra puntos de acopio y coordina recojos de material reciclable en Lima.">
+  <meta name="theme-color" content="#f5f7f4">
+  <title>Ofertas para recojo | ReCircula Lima</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script type="module" src="/assets/main.js"></script>
+</head>
+<body data-page="offers">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="/" aria-label="ReCircula Lima, inicio"><span class="brand-mark" aria-hidden="true">↻</span><span>ReCircula <strong>Lima</strong></span></a>
+      <nav class="main-nav" aria-label="Navegación principal"><a href="/">Inicio</a><a href="/acopio">Acopio</a><a href="/ofertas" aria-current="page">Ofertas</a><a href="/actividad">Mi actividad</a></nav>
+      <div id="account-nav" class="account-nav"><a class="nav-login" href="/iniciar-sesion">Iniciar sesión</a><a class="button button-compact" href="/registro">Crear cuenta</a></div>
+    </div>
+  </header>
+  <main id="contenido" class="wrap">
+    <p id="account-notice" class="status account-notice" role="status"></p>
+    <section class="page-head" aria-labelledby="offers-title">
+      <h1 id="offers-title">Material para recojo</h1>
+      <p>Consulta las publicaciones disponibles por distrito y material.</p>
+    </section>
+    <section class="offers-section" aria-label="Publicaciones y filtros">
+      <div id="offer-form" class="card publish-panel" hidden></div>
+      <div id="offer-hint" class="help-panel" hidden>
+        <p>Inicia sesión para publicar material o reservar un recojo.</p>
+        <a class="text-link" href="/iniciar-sesion?volver=ofertas">Iniciar sesión</a>
+      </div>
+      <div id="offer-filters" class="filters" aria-label="Filtros de ofertas"></div>
+      <p id="offer-status" class="status" aria-live="polite"></p>
+      <div id="offer-list" class="card-grid"></div>
+    </section>
+  </main>
+  <footer class="wrap footer"><span>ReCircula Lima</span><span>Datos de demostración</span></footer>
+</body>
+</html>

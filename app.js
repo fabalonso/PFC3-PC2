@@ -12,7 +12,7 @@ export function createApp(database = pool) {
     res.set({
       'X-Content-Type-Options': 'nosniff',
       'Referrer-Policy': 'strict-origin-when-cross-origin',
-      'Content-Security-Policy': "default-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+      'Content-Security-Policy': "default-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; frame-src https://www.openstreetmap.org",
     });
     next();
   });
@@ -43,8 +43,7 @@ export function createApp(database = pool) {
       return res.status(503).json({ status: 'unavailable', database: 'down' });
     }
   });
-  app.use(express.static(fileURLToPath(new URL('./public/', import.meta.url))));
-  app.get('/', (req, res) => res.redirect(302, '/index.html'));
+  app.use(express.static(fileURLToPath(new URL('./public/', import.meta.url)), { extensions: ['html'] }));
   app.use('/api/places', placesRouter(database));
   app.use('/api/auth', accountRouter(database));
   app.use('/api/offers', offersRouter(database));

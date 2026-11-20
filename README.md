@@ -26,3 +26,7 @@ El proyecto Vercel se conecta a Neon mediante DATABASE_URL. GitHub Actions usa V
 Producción: https://recircula-lima-pc2.vercel.app
 
 El job final comprueba la portada, los recursos de la interfaz, el directorio y /health con el SHA desplegado. Para repetir la prueba manualmente, ejecuta node scripts/smoke.js URL_PUBLICA SHA_ESPERADO.
+
+## Navegación y mapa
+
+El sitio tiene páginas propias para inicio, acopio, ofertas, actividad, registro e inicio de sesión. El directorio integra OpenStreetMap y marca la ubicación de referencia del punto seleccionado. La migración 005 agrega las coordenadas de demostración. El mapa usa la conexión del navegador al proveedor de cartografía.

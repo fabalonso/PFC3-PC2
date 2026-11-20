@@ -15,13 +15,13 @@ function offerCard(offer, action) {
 
 export function initOffers() {
   const formBox = document.querySelector('#offer-form');
-  const status = document.querySelector('#offer-status');
+  const status = document.querySelector('#offer-status, #activity-status');
+  const offerHint = document.querySelector('#offer-hint');
   let user = null;
   let catalog = null;
   const list = document.querySelector('#offer-list');
   const filters = document.querySelector('#offer-filters');
-  const activity = document.querySelector('#actividad');
-  const activityLink = document.querySelector('#activity-link');
+  const activityGate = document.querySelector('#activity-gate');
   const activityList = document.querySelector('#activity-list');
   const activityDescription = document.querySelector('#activity-description');
   let latestActivity = 0;
@@ -58,6 +58,7 @@ export function initOffers() {
   }
 
   async function refreshOffers() {
+    if (!list) return;
     const request = ++latest;
     try {
       const query = new URLSearchParams();
@@ -82,8 +83,8 @@ export function initOffers() {
 
   async function refreshActivity() {
     const request = ++latestActivity;
-    activity.hidden = !user;
-    activityLink.hidden = !user;
+    if (!activityList) return;
+    activityGate.hidden = Boolean(user);
     if (!user) {
       activityList.replaceChildren();
       return;
@@ -104,6 +105,8 @@ export function initOffers() {
   }
 
   function renderForm() {
+    if (!formBox) return;
+    offerHint.hidden = Boolean(user);
     const active = user?.role === 'generator';
     formBox.hidden = !active;
     formBox.replaceChildren();
@@ -141,7 +144,7 @@ export function initOffers() {
   }
 
   refreshOffers();
-  api('/api/places/filters').then((data) => {
+  if (filters) api('/api/places/filters').then((data) => {
     catalog = data;
     districtFilter = selectField('Distrito', 'offerDistrict', data.districts, { placeholder: 'Todos los distritos' });
     materialFilter = selectField('Material', 'offerMaterial', data.materials, { placeholder: 'Todos los materiales' });

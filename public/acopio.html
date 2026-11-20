@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Encuentra puntos de acopio y coordina recojos de material reciclable en Lima.">
+  <meta name="theme-color" content="#f5f7f4">
+  <title>Puntos de acopio | ReCircula Lima</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script type="module" src="/assets/main.js"></script>
+</head>
+<body data-page="places">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="/" aria-label="ReCircula Lima, inicio"><span class="brand-mark" aria-hidden="true">↻</span><span>ReCircula <strong>Lima</strong></span></a>
+      <nav class="main-nav" aria-label="Navegación principal"><a href="/">Inicio</a><a href="/acopio" aria-current="page">Acopio</a><a href="/ofertas">Ofertas</a><a href="/actividad">Mi actividad</a></nav>
+      <div id="account-nav" class="account-nav"><a class="nav-login" href="/iniciar-sesion">Iniciar sesión</a><a class="button button-compact" href="/registro">Crear cuenta</a></div>
+    </div>
+  </header>
+  <main id="contenido" class="wrap">
+    <p id="account-notice" class="status account-notice" role="status"></p>
+    <section class="page-head" aria-labelledby="places-title">
+      <h1 id="places-title">Puntos de acopio</h1>
+      <p>Encuentra un lugar que reciba tus materiales y revisa su ubicación aquí mismo.</p>
+    </section>
+    <section class="directory" aria-label="Directorio y mapa">
+      <div class="directory-list">
+        <div id="place-filters" class="filters" aria-label="Filtros del directorio"></div>
+        <p id="place-status" class="status" aria-live="polite">Cargando puntos de acopio…</p>
+        <div id="places" class="places-list"></div>
+      </div>
+      <aside id="map-panel" class="map-panel" aria-label="Mapa del directorio">
+        <div class="map-heading">
+          <h2 id="map-title" tabindex="-1">Mapa de acopio</h2>
+          <p id="map-caption">Selecciona un punto para ver su ubicación de referencia.</p>
+        </div>
+        <iframe id="place-map" title="Mapa de puntos de acopio en Lima" loading="lazy" referrerpolicy="no-referrer" hidden></iframe>
+        <p id="map-empty" class="map-empty">El mapa aparecerá al seleccionar un punto.</p>
+        <div class="map-credit">Cartografía de <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></div>
+      </aside>
+    </section>
+  </main>
+  <footer class="wrap footer"><span>ReCircula Lima</span><span>Datos de demostración</span></footer>
+</body>
+</html>

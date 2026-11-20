@@ -3,53 +3,49 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Consulta puntos de acopio y coordina recojos de material reciclable en Lima.">
-  <title>ReCircula Lima | Reciclaje y recojo</title>
+  <meta name="description" content="Encuentra puntos de acopio y coordina recojos de material reciclable en Lima.">
+  <meta name="theme-color" content="#f5f7f4">
+  <title>Reciclaje y recojo | ReCircula Lima</title>
   <link rel="stylesheet" href="/assets/style.css">
   <script type="module" src="/assets/main.js"></script>
 </head>
-<body>
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <a class="brand" href="/" aria-label="ReCircula Lima, inicio"><span class="brand-icon" aria-hidden="true">♻</span> ReCircula <span>Lima</span></a>
-      <nav id="nav" aria-label="Navegación principal"><a href="#acopio">Puntos de acopio</a><a href="#ofertas">Ofertas</a><a id="activity-link" href="#actividad" hidden>Mi actividad</a><span id="account-nav" class="account-nav"></span></nav>
+<body data-page="home">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="/" aria-label="ReCircula Lima, inicio"><span class="brand-mark" aria-hidden="true">↻</span><span>ReCircula <strong>Lima</strong></span></a>
+      <nav class="main-nav" aria-label="Navegación principal"><a href="/" aria-current="page">Inicio</a><a href="/acopio">Acopio</a><a href="/ofertas">Ofertas</a><a href="/actividad">Mi actividad</a></nav>
+      <div id="account-nav" class="account-nav"><a class="nav-login" href="/iniciar-sesion">Iniciar sesión</a><a class="button button-compact" href="/registro">Crear cuenta</a></div>
     </div>
   </header>
-  <main class="wrap">
-    <p id="account-notice" class="notice" role="status"></p>
-    <section class="hero" aria-labelledby="hero-title">
-      <div>
-        <h1 id="hero-title">Dales otra vuelta<br>a tus reciclables.</h1>
-        <p>Encuentra dónde entregar tus materiales o coordina un recojo en tu distrito.</p>
-        <a class="button button-light" href="#acopio">Explorar puntos de acopio</a>
+  <main id="contenido" class="wrap">
+    <p id="account-notice" class="status account-notice" role="status"></p>
+    <section class="landing" aria-labelledby="hero-title">
+      <div class="landing-copy">
+        <h1 id="hero-title">Reciclar cerca.<br><span>Así de simple.</span></h1>
+        <p>Encuentra dónde entregar tus reciclables o coordina un recojo en tu distrito de Lima.</p>
+        <div class="page-actions">
+          <a class="button" href="/acopio">Explorar puntos de acopio</a>
+          <a class="button button-outline" href="/ofertas">Ver ofertas</a>
+        </div>
       </div>
-      <div class="hero-art" aria-hidden="true"><span>♻</span></div>
+      <figure class="landing-image">
+        <img src="/images/materiales-reciclables.webp" width="1440" height="960" alt="Botella de vidrio, cartón y lata de aluminio, tres materiales reciclables." fetchpriority="high">
+      </figure>
     </section>
-    <section id="acopio" class="section" aria-labelledby="places-title">
-      <header class="section-head">
-        <div><h2 id="places-title">Puntos de acopio</h2><p>Consulta las opciones de entrega por distrito.</p></div>
-      </header>
-      <div id="place-filters" class="filters"></div>
-      <p id="place-status" class="status" aria-live="polite"></p>
-      <div id="places" class="card-grid"></div>
-    </section>
-    <section id="ofertas" class="section" aria-labelledby="offers-title">
-      <header class="section-head">
-        <div><h2 id="offers-title">Material para recojo</h2><p>Oportunidades de reciclaje publicadas por la comunidad.</p></div>
-      </header>
-      <div id="offer-form" class="card publish-panel" hidden></div>
-      <div id="offer-filters" class="filters"></div>
-      <p id="offer-status" class="status" aria-live="polite"></p>
-      <div id="offer-list" class="card-grid"></div>
-    </section>
-    <section id="actividad" class="section" aria-labelledby="activity-title" hidden>
-      <header class="section-head">
-        <div><h2 id="activity-title">Mi actividad</h2><p id="activity-description"></p></div>
-      </header>
-      <div id="activity-list" class="card-grid" aria-live="polite"></div>
+    <section class="landing-paths" aria-label="Formas de participar">
+      <article class="path-card">
+        <h2>Entrega tus materiales</h2>
+        <p>Filtra por distrito y material. Consulta los horarios y ubica cada punto en el mapa.</p>
+        <a class="text-link" href="/acopio">Ir al directorio</a>
+      </article>
+      <article class="path-card">
+        <h2>Coordina un recojo</h2>
+        <p>Publica material como generador o reserva una oferta como recolector.</p>
+        <a class="text-link" href="/registro">Crear una cuenta</a>
+      </article>
     </section>
   </main>
-  <dialog id="account-dialog" aria-labelledby="account-title"></dialog>
-  <footer class="wrap footer">ReCircula Lima · Datos ficticios de demostración</footer>
+  <footer class="wrap footer"><span>ReCircula Lima</span><span>Datos de demostración</span></footer>
 </body>
 </html>
