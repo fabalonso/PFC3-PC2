@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Consulta puntos de acopio y coordina recojos de material reciclable en Lima.">
+  <title>ReCircula Lima | Reciclaje y recojo</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script type="module" src="/assets/main.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="/" aria-label="ReCircula Lima, inicio"><span class="brand-icon" aria-hidden="true">♻</span> ReCircula <span>Lima</span></a>
+      <nav id="nav" aria-label="Navegación principal"><a href="#acopio">Puntos de acopio</a></nav>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <h1 id="hero-title">Dales otra vuelta<br>a tus reciclables.</h1>
+        <p>Encuentra dónde entregar tus materiales o coordina un recojo en tu distrito.</p>
+        <a class="button button-light" href="#acopio">Explorar puntos de acopio</a>
+      </div>
+      <div class="hero-art" aria-hidden="true"><span>♻</span></div>
+    </section>
+    <section id="acopio" class="section" aria-labelledby="places-title">
+      <header class="section-head">
+        <div><h2 id="places-title">Puntos de acopio</h2><p>Consulta las opciones de entrega por distrito.</p></div>
+      </header>
+      <div id="place-filters" class="filters"></div>
+      <p id="place-status" class="status" aria-live="polite"></p>
+      <div id="places" class="card-grid"></div>
+    </section>
+  </main>
+  <footer class="wrap footer">ReCircula Lima · Datos ficticios de demostración</footer>
+</body>
+</html>
