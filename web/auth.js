@@ -62,7 +62,20 @@ export function initAuth(onChange = () => {}) {
 
   function renderToolbar() {
     if (user) {
-      toolbar.replaceChildren(el('span', { className: 'role-badge', text: roleTitles[user.role] }));
+      const logout = el('button', { className: 'button button-outline', type: 'button', text: 'Cerrar sesión' });
+      logout.addEventListener('click', async () => {
+        logout.disabled = true;
+        try {
+          await api('/api/auth/logout', { method: 'POST' });
+          setUser(null);
+          notice.textContent = 'Sesión cerrada.';
+        } catch (error) {
+          notice.textContent = error.message;
+        } finally {
+          logout.disabled = false;
+        }
+      });
+      toolbar.replaceChildren(el('span', { className: 'role-badge', text: roleTitles[user.role] }), logout);
       return;
     }
     const login = el('button', { className: 'button button-outline', type: 'button', text: 'Iniciar sesión' });

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { checkPassword, hashPassword, normalizeEmail, validPassword } from './passwords.js';
-import { readSession, startSession } from './sessions.js';
+import { endSession, readSession, startSession } from './sessions.js';
 
 const dummyPassword = '00000000000000000000000000000000:' + '00'.repeat(64);
 
@@ -39,6 +39,11 @@ export function accountRouter(db) {
 
   router.get('/session', async (req, res) => {
     res.json({ user: await readSession(db, req) });
+  });
+
+  router.post('/logout', async (req, res) => {
+    await endSession(db, req, res);
+    res.status(204).end();
   });
 
   return router;

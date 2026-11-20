@@ -32,3 +32,9 @@ export async function readSession(db, req) {
   );
   return user ?? null;
 }
+
+export async function endSession(db, req, res) {
+  const token = sessionToken(req);
+  if (token) await db.query('DELETE FROM sessions WHERE token_hash = $1', [hashToken(token)]);
+  res.clearCookie(cookieName, cookieOptions);
+}
