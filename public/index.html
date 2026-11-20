@@ -12,7 +12,7 @@
   <header class="topbar">
     <div class="wrap topbar-inner">
       <a class="brand" href="/" aria-label="ReCircula Lima, inicio"><span class="brand-icon" aria-hidden="true">♻</span> ReCircula <span>Lima</span></a>
-      <nav id="nav" aria-label="Navegación principal"><a href="#acopio">Puntos de acopio</a><span id="account-nav" class="account-nav"></span></nav>
+      <nav id="nav" aria-label="Navegación principal"><a href="#acopio">Puntos de acopio</a><a href="#ofertas">Ofertas</a><span id="account-nav" class="account-nav"></span></nav>
     </div>
   </header>
   <main class="wrap">
@@ -32,6 +32,13 @@
       <div id="place-filters" class="filters"></div>
       <p id="place-status" class="status" aria-live="polite"></p>
       <div id="places" class="card-grid"></div>
+    </section>
+    <section id="ofertas" class="section" aria-labelledby="offers-title">
+      <header class="section-head">
+        <div><h2 id="offers-title">Material para recojo</h2><p>Oportunidades de reciclaje publicadas por la comunidad.</p></div>
+      </header>
+      <div id="offer-form" class="card publish-panel" hidden></div>
+      <p id="offer-status" class="status" aria-live="polite"></p>
     </section>
   </main>
   <dialog id="account-dialog" aria-labelledby="account-title"></dialog>

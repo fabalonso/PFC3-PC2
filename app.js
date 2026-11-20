@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { pool } from './src/db.js';
 import { placesRouter } from './src/places.js';
 import { accountRouter } from './src/account.js';
+import { offersRouter } from './src/offers.js';
 
 export function createApp(database = pool) {
   const app = express();
@@ -36,6 +37,7 @@ export function createApp(database = pool) {
   app.get('/', (req, res) => res.redirect(302, '/index.html'));
   app.use('/api/places', placesRouter(database));
   app.use('/api/auth', accountRouter(database));
+  app.use('/api/offers', offersRouter(database));
   app.use('/api', (req, res) => res.status(404).json({ error: 'Ruta no encontrada.' }));
   app.use((error, req, res, next) => {
     if (res.headersSent) return next(error);
