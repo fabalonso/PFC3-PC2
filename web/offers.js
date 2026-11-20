@@ -24,6 +24,24 @@ export function initOffers() {
   let materialFilter;
   let latest = 0;
 
+  function actionButton(offer, action, label, confirmation) {
+    const button = el('button', { className: 'button button-outline', type: 'button', text: label });
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      status.textContent = '';
+      try {
+        await api('/api/offers/' + offer.id + '/' + action, { method: 'POST' });
+        status.textContent = confirmation;
+      } catch (error) {
+        status.textContent = error.message;
+      } finally {
+        await refreshOffers();
+        button.disabled = false;
+      }
+    });
+    return button;
+  }
+
   async function refreshOffers() {
     const request = ++latest;
     try {
@@ -32,7 +50,10 @@ export function initOffers() {
       if (materialFilter?.control.value) query.set('material', materialFilter.control.value);
       const { items } = await api('/api/offers?' + query);
       if (request !== latest) return;
-      list.replaceChildren(...items.map((offer) => offerCard(offer)));
+      list.replaceChildren(...items.map((offer) => offerCard(offer, user?.role === 'collector'
+        ? actionButton(offer, 'reserve', 'Reservar', 'Material reservado.')
+        : null)));
+
       if (!items.length) {
         const message = query.size ? 'No hay ofertas que coincidan con los filtros.' : 'Todavía no hay material disponible.';
         list.append(el('p', { className: 'empty', text: message }));
@@ -94,5 +115,6 @@ export function initOffers() {
   return (value) => {
     user = value;
     renderForm();
+    refreshOffers();
   };
 }

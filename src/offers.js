@@ -17,6 +17,15 @@ export function offersRouter(db) {
     };
   }
 
+  router.param('id', (req, res, next, value) => {
+    const id = Number(value);
+    if (!/^\d+$/.test(value) || !Number.isInteger(id) || id < 1 || id > 2147483647) {
+      return res.status(404).json({ error: 'Oferta no encontrada.' });
+    }
+    res.locals.offerId = id;
+    next();
+  });
+
   router.get('/', async (req, res) => {
     const district = typeof req.query.district === 'string' ? req.query.district.trim() : '';
     const material = typeof req.query.material === 'string' ? req.query.material.trim() : '';
@@ -44,6 +53,15 @@ export function offersRouter(db) {
       [res.locals.user.id, material, district, weight],
     );
     res.status(201).json({ item: offer });
+  });
+
+  router.post('/:id/reserve', requireRole('collector'), async (_req, res) => {
+    const { rows: [offer] } = await db.query(
+      "UPDATE offers SET status = 'reserved', collector_id = $2 WHERE id = $1 AND status = 'available' RETURNING " + publicColumns,
+      [res.locals.offerId, res.locals.user.id],
+    );
+    if (!offer) return res.status(409).json({ error: 'La oferta ya no está disponible.' });
+    res.json({ item: offer });
   });
 
   return router;
