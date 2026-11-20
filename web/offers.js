@@ -20,6 +20,11 @@ export function initOffers() {
   let catalog = null;
   const list = document.querySelector('#offer-list');
   const filters = document.querySelector('#offer-filters');
+  const activity = document.querySelector('#actividad');
+  const activityLink = document.querySelector('#activity-link');
+  const activityList = document.querySelector('#activity-list');
+  const activityDescription = document.querySelector('#activity-description');
+  let latestActivity = 0;
   let districtFilter;
   let materialFilter;
   let latest = 0;
@@ -35,7 +40,7 @@ export function initOffers() {
       } catch (error) {
         status.textContent = error.message;
       } finally {
-        await refreshOffers();
+        await Promise.all([refreshOffers(), refreshActivity()]);
         button.disabled = false;
       }
     });
@@ -75,6 +80,29 @@ export function initOffers() {
     }
   }
 
+  async function refreshActivity() {
+    const request = ++latestActivity;
+    activity.hidden = !user;
+    activityLink.hidden = !user;
+    if (!user) {
+      activityList.replaceChildren();
+      return;
+    }
+    const generator = user.role === 'generator';
+    activityDescription.textContent = generator ? 'Estado de tus publicaciones.' : 'Estado de tus recojos.';
+    try {
+      const { items } = await api('/api/offers/mine');
+      if (request !== latestActivity) return;
+      activityList.replaceChildren(...items.map((offer) => offerCard(offer, pickupAction(offer))));
+      if (!items.length) {
+        activityList.append(el('p', { className: 'empty', text: generator ? 'Aún no tienes publicaciones.' : 'Aún no tienes recojos.' }));
+      }
+    } catch (error) {
+      if (request !== latestActivity) return;
+      activityList.replaceChildren(el('p', { className: 'status', text: error.message }));
+    }
+  }
+
   function renderForm() {
     const active = user?.role === 'generator';
     formBox.hidden = !active;
@@ -102,7 +130,7 @@ export function initOffers() {
         material.control.value = '';
         district.control.value = '';
         status.textContent = 'Tu material ya está disponible para recojo.';
-        await refreshOffers();
+        await Promise.all([refreshOffers(), refreshActivity()]);
       } catch (error) {
         status.textContent = error.message;
       } finally {
@@ -126,5 +154,6 @@ export function initOffers() {
     user = value;
     renderForm();
     refreshOffers();
+    refreshActivity();
   };
 }

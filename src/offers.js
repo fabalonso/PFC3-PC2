@@ -36,6 +36,16 @@ export function offersRouter(db) {
     res.json({ items: rows });
   });
 
+  router.get('/mine', async (req, res) => {
+    const user = await readSession(db, req);
+    if (!user) return res.status(401).json({ error: 'Inicia sesión para ver tu actividad.' });
+    const query = user.role === 'generator'
+      ? 'SELECT ' + publicColumns + ' FROM offers WHERE generator_id = $1 ORDER BY id DESC'
+      : 'SELECT ' + publicColumns + ' FROM offers WHERE collector_id = $1 ORDER BY id DESC';
+    const { rows } = await db.query(query, [user.id]);
+    res.json({ items: rows });
+  });
+
   router.post('/', requireRole('generator'), async (req, res) => {
     const { material, district: input, weightKg } = req.body ?? {};
     const district = typeof input === 'string' ? input.trim() : '';
