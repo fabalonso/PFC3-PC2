@@ -16,3 +16,11 @@ El directorio contiene lugares y horarios ficticios para demostrar el flujo acad
 ## Pruebas
 
 Ejecuta npm test para usar un PostgreSQL local en memoria mediante PGlite. Define TEST_DATABASE_URL para aplicar las migraciones y ejecutar los mismos flujos contra PostgreSQL real en un esquema de prueba aislado. GitHub Actions ejecuta build y pruebas con PostgreSQL 17.
+
+## Ramas y despliegue
+
+Trabaja en test y abre un pull request hacia main. Cada commit de la práctica identifica su historia PC2PF3. Los pushes a test y los pull requests ejecutan build, pruebas, Semgrep y Gitleaks. Solo main puede desplegar si todas las verificaciones pasan.
+
+El proyecto Vercel se conecta a Neon mediante DATABASE_URL. GitHub Actions usa VERCEL_TOKEN, VERCEL_ORG_ID y VERCEL_PROJECT_ID como secretos. El token requiere acceso al proyecto de producción. El workflow aplica las migraciones con DATABASE_URL_UNPOOLED cuando está disponible, construye el artefacto de Vercel y publica el commit validado.
+
+Producción: https://recircula-lima-pc2.vercel.app

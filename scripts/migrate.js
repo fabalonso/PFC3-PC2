@@ -1,10 +1,13 @@
 import { readdir, readFile } from 'node:fs/promises';
-import { pool } from '../src/db.js';
+import pg from 'pg';
+
+const connectionString = process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL;
+const pool = new pg.Pool({ connectionString, max: 1, connectionTimeoutMillis: 10_000 });
 
 const migrations = new URL('../db/', import.meta.url);
 
 async function migrate() {
-  if (!process.env.DATABASE_URL) throw new Error('Configura DATABASE_URL.');
+  if (!connectionString) throw new Error('Configura DATABASE_URL.');
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
