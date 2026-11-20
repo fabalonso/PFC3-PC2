@@ -12,3 +12,7 @@ Se requiere Node.js 24 y una base PostgreSQL. Copia .env.example a .env y config
 4. npm start
 
 El directorio contiene lugares y horarios ficticios para demostrar el flujo académico.
+
+## Pruebas
+
+Ejecuta npm test para usar un PostgreSQL local en memoria mediante PGlite. Define TEST_DATABASE_URL para aplicar las migraciones y ejecutar los mismos flujos contra PostgreSQL real en un esquema de prueba aislado. GitHub Actions ejecuta build y pruebas con PostgreSQL 17.
