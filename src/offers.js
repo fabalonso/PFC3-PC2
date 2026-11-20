@@ -73,5 +73,14 @@ export function offersRouter(db) {
     res.json({ item: offer });
   });
 
+  router.post('/:id/complete', requireRole('generator'), async (_req, res) => {
+    const { rows: [offer] } = await db.query(
+      "UPDATE offers SET status = 'delivered' WHERE id = $1 AND status = 'reserved' AND generator_id = $2 RETURNING " + publicColumns,
+      [res.locals.offerId, res.locals.user.id],
+    );
+    if (!offer) return res.status(409).json({ error: 'La oferta no está disponible para confirmar la entrega.' });
+    res.json({ item: offer });
+  });
+
   return router;
 }

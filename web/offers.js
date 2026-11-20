@@ -46,6 +46,9 @@ export function initOffers() {
     if (offer.status === 'reserved' && user?.role === 'collector') {
       return actionButton(offer, 'cancel', 'Cancelar reserva', 'Reserva cancelada. El material vuelve a estar disponible.');
     }
+    if (offer.status === 'reserved' && user?.role === 'generator') {
+      return actionButton(offer, 'complete', 'Confirmar entrega', 'Entrega confirmada.');
+    }
     return null;
   }
 
